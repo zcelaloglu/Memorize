@@ -18,7 +18,7 @@ struct ContentView: View {
     var body: some View {
         VStack {
             title
-            Spacer()
+            Spacer(minLength: 30)
             ScrollView {
                 cards
             }
@@ -39,17 +39,14 @@ struct ContentView: View {
     
     var themeButtons: some View {
         HStack(spacing: 30) {
-            ThemeButton(text: "Halloween", symbol: "circle.lefthalf.filled.inverse") {
-                emojis = halloweenEmojis.shuffled()
-                themeColor = .orange
+            ThemeButton(text: "Halloween", symbol: "moon.stars.fill") {
+                setupTheme(emojisSet: halloweenEmojis, color: .orange)
             }
-            ThemeButton(text: "Animals", symbol: "drop.halffull") {
-                emojis = animalEmojis.shuffled()
-                themeColor = .blue
+            ThemeButton(text: "Animals", symbol: "pawprint.fill") {
+                setupTheme(emojisSet: animalEmojis, color: .blue)
             }
-            ThemeButton(text: "Fruits", symbol: "sun.lefthalf.filled") {
-                emojis = fruitEmojis.shuffled()
-                themeColor = .green
+            ThemeButton(text: "Fruits", symbol: "applelogo") {
+                setupTheme(emojisSet: fruitEmojis, color: .green)
             }
         }
         .imageScale(.large)
@@ -62,6 +59,11 @@ struct ContentView: View {
             }
         }.foregroundColor(themeColor)
     }
+    
+    private func setupTheme(emojisSet: [String], color: Color) {
+        emojis = (emojisSet + emojisSet).shuffled()
+        themeColor = color
+    }
 }
 
 struct ThemeButton: View {
@@ -73,14 +75,14 @@ struct ThemeButton: View {
         Button(action: action, label: {
             VStack {
                 Image(systemName: symbol)
-                Text(text).font(.caption)
+                Text(text).font(.caption2)
             }
     })
 }}
 
 struct CardView: View {
     let content: String
-    @State var isFaceUp: Bool = true
+    @State var isFaceUp: Bool = false
     
     var body: some View {
         ZStack {
