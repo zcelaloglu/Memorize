@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EmojiMemoryGameView: View {
-    @StateObject var viewModel: EmojiMemoryGame = .init()
+    @ObservedObject var viewModel: EmojiMemoryGame = .init()
         
     var body: some View {
         VStack {
