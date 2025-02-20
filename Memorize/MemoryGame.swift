@@ -18,7 +18,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
             cards.append(Card(content: content, id: "\(pairIndex + 1)a"))
             cards.append(Card(content: content, id: "\(pairIndex + 1)b"))
         }
-        cards.shuffle()
+        shuffle()
     }
     
     var indexOfTheOneAndOnlyFaceUpCard: Int? {
@@ -32,7 +32,6 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
            !cards[chosenIndex].isMatched {
             if let potentialMatchIndex = indexOfTheOneAndOnlyFaceUpCard {
                 if cards[chosenIndex].content == cards[potentialMatchIndex].content {
-                    
                     cards[chosenIndex].isMatched = true
                     cards[potentialMatchIndex].isMatched = true
                     score += 2
@@ -50,16 +49,6 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
     }
     
     mutating func shuffle() {
-        cards.shuffle()
-    }
-    
-    mutating func resetGame() {
-        for index in cards.indices {
-            cards[index].isFaceUp = false
-            cards[index].isMatched = false
-            cards[index].hasBeenSeen = false
-        }
-        score = 0
         cards.shuffle()
     }
     
