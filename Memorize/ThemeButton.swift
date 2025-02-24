@@ -11,7 +11,7 @@ struct ThemeButton: View {
     let text: String
     let symbol: String
     let action: () -> Void
-    
+
     var body: some View {
         Button(action: action, label: {
             VStack {
