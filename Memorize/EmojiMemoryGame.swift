@@ -17,17 +17,15 @@ class EmojiMemoryGame: ObservableObject {
         Theme(name: "Faces", emojis: ["😀", "😃", "😄", "😁", "😆", "😅", "😂", "🤣", "😊"], numberOfPairs: Int.random(in: 6...8), color: .yellow)
     ]
     
-    @Published private var model: MemoryGame<String>
-    @Published private(set) var currentTheme: Theme
+    @Published private var model: MemoryGame<String>!
+    @Published private(set) var currentTheme: Theme!
     
     var score: Int {
         model.score
     }
     
     init() {
-        let theme = EmojiMemoryGame.themes.randomElement()!
-        currentTheme = theme
-        model = EmojiMemoryGame.createMemoryGame(with: theme)
+        self.newGame()
     }
     
     private static func createMemoryGame(with theme: Theme) -> MemoryGame<String> {
