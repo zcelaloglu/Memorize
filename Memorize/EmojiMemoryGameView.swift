@@ -25,7 +25,9 @@ struct EmojiMemoryGameView: View {
             }
             Button("New Game") {
                 viewModel.newGame()
-            }.padding().clipShape(Capsule())
+            }
+            .padding()
+            .clipShape(Capsule())
             Spacer()
         }
         .padding()
@@ -43,7 +45,7 @@ struct EmojiMemoryGameView: View {
                 }
             }
         }
-        .foregroundColor(viewModel.currentTheme.color)
+        .foregroundStyle(viewModel.currentTheme.color)
     }
 }
 
