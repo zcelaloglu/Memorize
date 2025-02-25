@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CardView: View {
     
-    @ObservedObject var card: MemoryGame<String>.Card
+    let card: MemoryGame<String>.Card
     
     var body: some View {
         ZStack {

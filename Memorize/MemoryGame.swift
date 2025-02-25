@@ -7,10 +7,10 @@
 
 import Foundation
 
-class MemoryGame<CardContent>: ObservableObject where CardContent: Equatable {
+struct MemoryGame<CardContent> where CardContent: Equatable {
     private(set) var cards: Array<Card>
-    @Published private(set) var score = 0
-    private var faceUpCardIndex: Int?
+    private(set) var score = 0
+    private var faceUpCardIndex: Int? // Store the index of the face-up card
     
     private(set) var firstFaceUpCard: Card?
     private(set) var secondFaceUpCard: Card?
@@ -19,61 +19,53 @@ class MemoryGame<CardContent>: ObservableObject where CardContent: Equatable {
         cards = []
         for pairIndex in 0..<numberOfPairsOfCards {
             let content: CardContent = cardContentFactory(pairIndex)
-            cards.append(Card(content: content))
-            cards.append(Card(content: content))
+            cards.append(Card(content: content, id: "\(pairIndex + 1)a"))
+            cards.append(Card(content: content, id: "\(pairIndex + 1)b"))
         }
         shuffle()
     }
     
-    func choose(_ card: Card) {
-        guard !card.isFaceUp && !card.isMatched else { return }
-        card.isFaceUp = true
+    mutating func choose(_ card: Card) {
+        guard let chosenIndex = cards.firstIndex(where: { $0.id == card.id }),
+              !cards[chosenIndex].isFaceUp,
+              !cards[chosenIndex].isMatched else {
+            return
+        }
         
-        if firstFaceUpCard == nil {
-            firstFaceUpCard = card
-        } else if secondFaceUpCard == nil {
-            secondFaceUpCard = card
-        } else {
-            if firstFaceUpCard == secondFaceUpCard {
-                firstFaceUpCard?.isMatched = true
-                secondFaceUpCard?.isMatched = true
+        if let potentialMatchIndex = cards.indices.filter({ cards[$0].isFaceUp && !cards[$0].isMatched }).only {
+            if cards[chosenIndex].content == cards[potentialMatchIndex].content {
+                cards[chosenIndex].isMatched = true
+                cards[potentialMatchIndex].isMatched = true
                 score += 2
-            } else {
-                firstFaceUpCard?.isFaceUp = false
-                secondFaceUpCard?.isFaceUp = false
+            } else if cards[chosenIndex].hasBeenSeen || cards[potentialMatchIndex].hasBeenSeen {
                 score -= 1
             }
-            firstFaceUpCard = card
-            secondFaceUpCard = nil
+            cards[chosenIndex].isFaceUp = true
+            cards[chosenIndex].hasBeenSeen = true
+        } else {
+            for index in cards.indices {
+                cards[index].isFaceUp = false
+            }
+            cards[chosenIndex].isFaceUp = true
+            cards[chosenIndex].hasBeenSeen = true
         }
     }
     
-    func shuffle() {
+    mutating func shuffle() {
         cards.shuffle()
     }
     
-    class Card: ObservableObject, Equatable, Identifiable, CustomDebugStringConvertible {
-        
+    struct Card: Equatable, Identifiable, CustomDebugStringConvertible {
         var debugDescription: String {
             return "\(id): \(content) \(isFaceUp ? "up": "down") \(isMatched ? " matched" : "")"
         }
         
-        @Published var isFaceUp: Bool = false
-        @Published var isMatched: Bool = false
-        
+        var isFaceUp: Bool = false
+        var isMatched: Bool = false
         var hasBeenSeen = false
         let content: CardContent
         
-        init(content: CardContent) {
-            self.content = content
-        }
-        
-        var id: CardContent { content }
-        
-        static func == (lhs: MemoryGame<CardContent>.Card, rhs: MemoryGame<CardContent>.Card) -> Bool {
-            lhs.id == rhs.id
-        }
-    
+        var id: String
     }
 }
 
