@@ -8,19 +8,23 @@
 import SwiftUI
 
 struct CardView: View {
-    let card: MemoryGame<String>.Card
+    
+    @ObservedObject var card: MemoryGame<String>.Card
     
     var body: some View {
-        RoundedRectangle(cornerRadius: 12)
-            .fill(card.isFaceUp ? .white : .orange)
-            .strokeBorder(lineWidth: 2)
-            .overlay {
+        ZStack {
+            let base = RoundedRectangle(cornerRadius: 12)
+            Group {
+                base.fill(.white)
+                base.strokeBorder(lineWidth: 2)
                 Text(card.content)
                     .font(.system(size: 200))
                     .minimumScaleFactor(0.01)
                     .aspectRatio(1, contentMode: .fit)
-                    .opacity(card.isFaceUp ? 1 : 0)
             }
             .opacity(card.isFaceUp ? 1 : 0)
+            base.fill().opacity(card.isFaceUp ? 0 : 1)
+        }
+        .opacity(card.isMatched ? 0 : 1)
     }
 }
