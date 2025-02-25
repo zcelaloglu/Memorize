@@ -8,8 +8,8 @@
 import Foundation
 
 class MemoryGame<CardContent>: ObservableObject where CardContent: Equatable {
-    private(set) var cards: Array<Card>
-    @Published private(set) var score = 0
+    @Published private(set) var cards: [Card]
+    @Published var score = 0
     private var faceUpCardIndex: Int?
     
     private(set) var firstFaceUpCard: Card?
