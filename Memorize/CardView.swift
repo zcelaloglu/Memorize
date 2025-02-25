@@ -8,11 +8,8 @@
 import SwiftUI
 
 struct CardView: View {
-    let card: MemoryGame<String>.Card
     
-    init(_ card: MemoryGame<String>.Card) {
-        self.card = card
-    }
+    @ObservedObject var card: MemoryGame<String>.Card
     
     var body: some View {
         ZStack {
