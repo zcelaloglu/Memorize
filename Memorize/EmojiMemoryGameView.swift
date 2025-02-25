@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EmojiMemoryGameView: View {
-    @StateObject var viewModel = EmojiMemoryGame()
+    @ObservedObject var viewModel: EmojiMemoryGame
     
     var body: some View {
         VStack {
@@ -16,9 +16,7 @@ struct EmojiMemoryGameView: View {
                 .font(.title)
                 .padding()
             
-            Text("Score: \(viewModel.score)")
-                .font(.title2)
-                .foregroundColor(.gray)
+            ScoreView(game: viewModel.game)
             
             ScrollView {
                 cards.animation(.default, value: viewModel.cards)
@@ -50,5 +48,5 @@ struct EmojiMemoryGameView: View {
 }
 
 #Preview {
-    EmojiMemoryGameView()
+    EmojiMemoryGameView(viewModel: EmojiMemoryGame())
 }

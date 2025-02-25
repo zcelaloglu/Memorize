@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Combine
 
 class EmojiMemoryGame: ObservableObject {
     private static let themes: [Theme] = [
@@ -21,10 +20,12 @@ class EmojiMemoryGame: ObservableObject {
     @Published private var model: MemoryGame<String>!
     @Published private(set) var currentTheme: Theme!
     
-    private var cancellable: AnyCancellable?
-    
     var score: Int {
         model.score
+    }
+    
+    var game: MemoryGame<String> {
+        model
     }
     
     init() {
@@ -50,9 +51,6 @@ class EmojiMemoryGame: ObservableObject {
         let theme = EmojiMemoryGame.themes.randomElement() ?? EmojiMemoryGame.themes[0]
         currentTheme = theme
         model = EmojiMemoryGame.createMemoryGame(with: theme)
-        cancellable = model.objectWillChange.sink { [weak self] _ in
-            self?.objectWillChange.send()
-        }
     }
 }
 
