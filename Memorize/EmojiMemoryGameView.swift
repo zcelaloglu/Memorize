@@ -10,6 +10,9 @@ import SwiftUI
 struct EmojiMemoryGameView: View {
     @ObservedObject var viewModel: EmojiMemoryGame
     
+    private let aspectRatio: CGFloat = 2/3
+    private let spacing : CGFloat = 4
+    
     var body: some View {
         VStack {
             Text(viewModel.currentTheme.name)
@@ -36,8 +39,8 @@ struct EmojiMemoryGameView: View {
             ForEach(viewModel.cards) { card in
                 VStack(spacing: 0) {
                     CardView(card: card)
-                        .aspectRatio(2/3, contentMode: .fit)
-                        .padding(4)
+                        .aspectRatio(aspectRatio, contentMode: .fit)
+                        .padding(spacing)
                 }.onTapGesture {
                     viewModel.choose(card)
                 }
