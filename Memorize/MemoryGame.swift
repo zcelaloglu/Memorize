@@ -64,8 +64,10 @@ class MemoryGame<CardContent>: ObservableObject where CardContent: Equatable {
         var hasBeenSeen = false
         let content: CardContent
         
-        init(content: CardContent) {
+        init(content: CardContent, isFaceUp: Bool = false, isMatched: Bool = false) {
             self.content = content
+            self.isFaceUp = isFaceUp
+            self.isMatched = isMatched
         }
         
         var id: CardContent { content }
